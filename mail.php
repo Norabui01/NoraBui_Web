@@ -1,15 +1,39 @@
 <?php
+$error = ""; $error1 = ""; $error2 = ""; $error3 = ""; $error4 = "";
 
 $name = $_POST['name'];
 $email = $_POST['email'];
 $message = $_POST['message'];
 
-$mailheader ="From: ".$name."<".$email.">\r\n";
+if($_POST){
+	if(!$email){
+		$error1 = "Email Address is empty!";
+	}
+	if(!$name){
+		$error2 = "Name field is required!";
+	}
+	if(!$message){
+		$error3 = "Messafe field is required";
+	}
+	if ($email && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+		$error4 = "Email address is invalid!";
+	}
+	if($error1 != "" || $error2 != "" || $error3 != "" ||$error4 != ""){
+		$error = "There were error(s) in your form!";
 
-$recipient = "ngocmj01@gmail.com";
+	}else{
+		$mailheader ="From: ".$name."<".$email.">\r\n";
+		$recipient = "ngocmj01@gmail.com";
+		mail($recipient, $email, $message, $mailheader)
+		or die("Error!");
+	
 
-mail($recipient, $email, $message, $mailheader)
-or die("Error!");
+//$mailheader ="From: ".$name."<".$email.">\r\n";
+
+//$recipient = "ngocmj01@gmail.com";
+
+//mail($recipient, $email, $message, $mailheader)
+//or die("Error!");
 
 echo'
 <!DOCTYPE HTML>
@@ -78,5 +102,7 @@ echo'
 	</body>
 </html>
 ';
+	}
+}
 
 ?>
